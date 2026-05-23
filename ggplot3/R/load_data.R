@@ -18,8 +18,8 @@ load_data <- function(){
 plastics <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2021/2021-01-26/plastics.csv')
 
 # Add ISO-2 codes
-plastics <- plastics %>%
-  filter(country != "EMPTY") %>%
+plastics <- plastics |>
+  filter(country != "EMPTY") |>
   mutate(iso2 = countrycode(country, origin = "country.name", destination = "iso2c"))
 
 iso2_list <- unique(plastics$iso2)
