@@ -1,0 +1,29 @@
+---
+title: "main-functions"
+format: html
+vignette: >
+  %\VignetteIndexEntry{main-functions}
+  %\VignetteEngine{quarto::html}
+  %\VignetteEncoding{UTF-8}
+execute:
+  collapse: true
+  comment: "#>"
+---
+
+```{r}
+#| label: setup
+
+library(ggplot3)
+```
+
+```{r}
+#Ranking Function by country
+```
+
+```{r}
+#Creates a quantitative graph like a bubble plot
+```
+
+```{r}
+#Creates an interactive table to show all countries and their respective ranks
+```

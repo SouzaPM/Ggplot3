@@ -1,0 +1,18 @@
+Package: ggplot3
+Title: What the Package Does (One Line, Title Case)
+Version: 0.0.0.9000
+Authors@R: 
+    person("Mason", "Souza", , "mpsouza@calpoly.edu", role = c("aut", "cre"))
+    person("Ryan", "Bruning", , "mpsouza@calpoly.edu", role = c("aut", "cre"))
+    person("Will", "Matthewson", , "mpsouza@calpoly.edu", role = c("aut", "cre"))
+Description: Creates a ranking object for gdp and Co2. 
+License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
+    license
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 8.0.0
+Suggests: 
+    knitr,
+    quarto,
+    rmarkdown
+VignetteBuilder: knitr
