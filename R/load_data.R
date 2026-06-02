@@ -9,26 +9,33 @@
 #'   \code{co2} into the calling environment as side-effects. Consider
 #'   returning a named list for a more functional interface.
 #'
-#' @importFrom readr read_csv
-#' @importFrom dplyr filter mutate
+#' @importFrom readr read_csv 
+#' @importFrom dplyr filter mutate rename
 #' @importFrom countrycode countrycode
 #' @export
+
 load_data <- function(){
-# Load plastic waste data
-plastics <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2021/2021-01-26/plastics.csv')
 
-# Add ISO-2 codes
-plastics <- plastics %>%
-  filter(country != "EMPTY") %>%
-  mutate(iso2 = countrycode(country, origin = "country.name", destination = "iso2c"))
-
-iso2_list <- unique(plastics$iso2)
-iso2_list <- iso2_list[iso2_list != "TW"]
-
-# Load pre-fetched GDP and population data (from World Bank API)
-gdp_data <- readr::read_csv("gdp_data.csv")
-population_data <- readr::read_csv("population_data.csv")
-
-# Load CO2 data from local file
-co2 <- readr::read_csv("owid-co2-data.csv")
+  plastics <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2021/2021-01-26/plastics.csv')
+  
+  
+  plastics <- plastics |>
+    filter(country != "EMPTY") |>
+    mutate(iso2 = countrycode(country, origin = "country.name", destination = "iso2c"))
+  
+  gdp_data <- readr::read_csv(here::here("gdp_data.csv")) |>
+    rename("iso2" = "iso2c") 
+  population_data <- readr::read_csv(here::here("population_data.csv")) |>
+    rename("iso2" = iso2c,
+           "population" = value)
+  co2 <- readr::read_csv(here::here("owid-co2-data.csv")) |>
+    dplyr::mutate(
+      iso2 = countrycode::countrycode(iso_code,origin = "iso3c",destination = "iso2c"))
+  
+  list(
+    plastics = plastics,
+    gdp_data = gdp_data,
+    population_data = population_data,
+    co2 = co2
+  )
 }
