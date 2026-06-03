@@ -23,19 +23,24 @@ load_data <- function(){
     filter(country != "EMPTY") |>
     mutate(iso2 = countrycode(country, origin = "country.name", destination = "iso2c"))
   
-  gdp_data <- readr::read_csv(here::here("gdp_data.csv")) |>
+  gdp_data <- readr::read_csv("gdp_data.csv") |>
     rename("iso2" = "iso2c") 
-  population_data <- readr::read_csv(here::here("population_data.csv")) |>
+  population_data <- readr::read_csv("population_data.csv") |>
     rename("iso2" = iso2c,
            "population" = value)
-  co2 <- readr::read_csv(here::here("owid-co2-data.csv")) |>
+  co2 <- readr::read_csv("owid-co2-data.csv") |>
     dplyr::mutate(
       iso2 = countrycode::countrycode(iso_code,origin = "iso3c",destination = "iso2c"))
   
-  list(
-    plastics = plastics,
-    gdp_data = gdp_data,
-    population_data = population_data,
-    co2 = co2
-  )
+  meta_set <- plastics |>
+    dplyr::left_join(gdp_data, by = "iso2") |>
+    dplyr::left_join(population_data, by = "iso2") |>
+    dplyr::left_join(co2, by = "iso2") |>
+    dplyr::rename("population" = population.x) |>
+    dplyr::mutate(
+      gdp_per_capita = gdp_billions * 1e9 / population,
+      plastic_waste_per_capita = grand_total / population
+    )
+  
+  return(meta_set)
 }

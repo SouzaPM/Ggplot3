@@ -35,30 +35,15 @@ rank_table <- function(variable, year_select) {
   
   data <- load_data()
   
-  co2_year <- data$co2 |>
-    dplyr::filter(year == year_select) |>
-    dplyr::select(iso2, co2_per_capita)
+  data <- data |>
+    dplyr::filter(year.x == year_select)
   
-  meta_set <- data$plastics |>
-    dplyr::filter(year == year_select) |>
-    dplyr::left_join(data$gdp_data, by = "iso2") |>
-    dplyr::left_join(data$population_data, by = "iso2") |>
-    dplyr::left_join(co2_year, by = "iso2") 
-  
-  
-  meta_set <- meta_set |>
-    mutate(
-      gdp_per_capita = gdp_billions * 1e9 / population,
-      plastic_waste_per_capita = grand_total / population
-    )
-  
-  ranked_table <- meta_set |> 
+  ranked_table <- data |> 
     filter(
-      year == year_select,
-      !is.na(country),
-      country != "Taiwan"
+      !is.na(country.x),
+      country.x != "Taiwan"
     ) |>
-    group_by(country) |>
+    group_by(country.x) |>
     summarise(
       value = mean(.data[[variable]], na.rm = TRUE),
       .groups = "drop"
@@ -69,7 +54,7 @@ rank_table <- function(variable, year_select) {
     ) |> 
     arrange(rank) |>
     rename(
-      Country = country,
+      Country = country.x,
       Value = value,
       Rank = rank
     )
